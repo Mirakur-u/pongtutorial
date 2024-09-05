@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://pkook78t65v2"]
+
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_i2qv0"]
+[ext_resource type="PackedScene" uid="uid://cqdlwgbkdokkv" path="res://Scenes/wall.tscn" id="1_r4ihw"]
+[ext_resource type="PackedScene" uid="uid://bcapdldy4upfk" path="res://Scenes/paddle.tscn" id="2_n2ejd"]
+[ext_resource type="Script" path="res://Scripts/enemy_paddle.gd" id="3_72nqf"]
+[ext_resource type="PackedScene" uid="uid://db38oy120vxxh" path="res://Scenes/ball.tscn" id="4_snsla"]
+[ext_resource type="PackedScene" uid="uid://xbsrayxbt5xh" path="res://Scenes/goal.tscn" id="5_wmy4c"]
+[ext_resource type="Texture2D" uid="uid://b1bafxems6u7a" path="res://Assets/PingPongDottedLine.png" id="7_to1ca"]
+[ext_resource type="PackedScene" uid="uid://cdorhit0mw7m0" path="res://Scenes/ui.tscn" id="8_nav21"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_i2qv0")
+
+[node name="Walls" type="Node" parent="."]
+
+[node name="TopWall" parent="Walls" instance=ExtResource("1_r4ihw")]
+position = Vector2(10, -600)
+rotation = 1.5708
+scale = Vector2(1, 9)
+
+[node name="BottomWall" parent="Walls" instance=ExtResource("1_r4ihw")]
+position = Vector2(10, 600)
+rotation = 1.5708
+scale = Vector2(1, 9)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.4, 0.4)
+
+[node name="Paddle" parent="." instance=ExtResource("2_n2ejd")]
+position = Vector2(-1050, 0)
+
+[node name="EnemyPaddle" parent="." node_paths=PackedStringArray("ball") instance=ExtResource("2_n2ejd")]
+position = Vector2(1070, 0)
+script = ExtResource("3_72nqf")
+ball = NodePath("../Ball")
+paddle_speed = 35000
+
+[node name="Ball" parent="." instance=ExtResource("4_snsla")]
+
+[node name="LeftGoal" parent="." instance=ExtResource("5_wmy4c")]
+position = Vector2(-1075, 0)
+
+[node name="RightGoal" parent="." instance=ExtResource("5_wmy4c")]
+position = Vector2(1095, 0)
+rotation = 3.14159
+
+[node name="Line2D" type="Line2D" parent="."]
+texture_repeat = 2
+points = PackedVector2Array(0, -600, 0, 600)
+texture = ExtResource("7_to1ca")
+texture_mode = 1
+
+[node name="UI" parent="." instance=ExtResource("8_nav21")]
+
+[connection signal="point_scored" from="LeftGoal" to="." method="_on_left_goal_point_scored"]
+[connection signal="point_scored" from="RightGoal" to="." method="_on_right_goal_point_scored"]
