@@ -4,6 +4,7 @@ class_name Ball
 
 @export var initial_ball_speed = 20
 @export var speed_multiplier = 1.02
+@onready var sfx: AudioStreamPlayer2D = $sfx
 
 var ball_speed = initial_ball_speed
 
@@ -17,6 +18,7 @@ func _physics_process(delta: float) -> void:
 	
 	if(collision):
 		velocity = velocity.bounce(collision.get_normal()) * speed_multiplier
+		sfx.play_sfx()
 
 
 func start_ball():
